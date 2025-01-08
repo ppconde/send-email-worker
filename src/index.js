@@ -2,15 +2,30 @@ import { Resend } from "resend";
 
 export default {
   async fetch(request, env, ctx) {
-    const resend = new Resend("your_resend_api_key");
+    if (request.method !== "POST") {
+      return Response.redirect("https://os.ppconde.com", 301);
+    }
 
-    const { data, error } = await resend.emails.send({
-      from: "hello@example.com",
-      to: "someone@example.com",
-      subject: "Hello World",
-      html: "<p>Hello from Workers</p>",
-    });
+    const resend = new Resend(env.RESEND_API_KEY);
 
-    return Response.json({ data, error });
+    try {
+      const contactMsg = await request.formData();
+
+      const subject = contactMsg.get("subject");
+      const fromEmail = contactMsg.get("email");
+      const message = contactMsg.get("message");
+
+      const { data, error } = await resend.emails.send({
+        from: "No-reply <no-reply@ppconde.com>",
+        replyTo: fromEmail,
+        to: "contact@ppconde.com",
+        subject: subject,
+        html: message,
+      });
+
+      return Response.json({ data, error });
+    } catch (error) {
+      return Response.json({ error: error.message || "Unknown error" });
+    }
   },
 };
