@@ -19,8 +19,8 @@ export default {
         from: "No-reply <no-reply@ppconde.com>",
         replyTo: fromEmail,
         to: "contact@ppconde.com",
-        subject,
-        text: message,
+        subject: String(subject),
+        text: String(message),
       });
 
       return Response.json({ data, error });
