@@ -19,7 +19,7 @@ export default {
         from: "No-reply <no-reply@ppconde.com>",
         replyTo: fromEmail,
         to: "contact@ppconde.com",
-        subject: subject,
+        subject: String(subject),
         html: message,
       });
 
