@@ -16,16 +16,14 @@ export default {
       const message = contactMsg.get("message");
       const html = contactMsg.get("html");
 
-      const { data, error } = await resend.emails.send(
-        JSON.stringify({
-          from: "No-reply <no-reply@ppconde.com>",
-          replyTo: fromEmail,
-          to: "contact@ppconde.com",
-          subject,
-          text: message,
-          html,
-        })
-      );
+      const { data, error } = await resend.emails.send({
+        from: "No-reply <no-reply@ppconde.com>",
+        replyTo: fromEmail,
+        to: "contact@ppconde.com",
+        subject,
+        text: message,
+        html,
+      });
 
       return Response.json({ data, error });
     } catch (error) {
