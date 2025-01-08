@@ -15,13 +15,15 @@ export default {
       const fromEmail = contactMsg.get("email");
       const message = contactMsg.get("message");
 
-      const { data, error } = await resend.emails.send({
-        from: "No-reply <no-reply@ppconde.com>",
-        replyTo: fromEmail,
-        to: "contact@ppconde.com",
-        subject: String(subject),
-        html: message,
-      });
+      const { data, error } = await resend.emails.send(
+        JSON.stringify({
+          from: "No-reply <no-reply@ppconde.com>",
+          replyTo: fromEmail,
+          to: "contact@ppconde.com",
+          subject,
+          html,
+        })
+      );
 
       return Response.json({ data, error });
     } catch (error) {
