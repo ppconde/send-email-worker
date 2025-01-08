@@ -9,18 +9,27 @@ export default {
     const resend = new Resend(env.RESEND_API_KEY);
 
     try {
-      const contactMsg = await request.formData();
+      const formData = await request.formData();
+      const searchParams = new URLSearchParams(
+        Array.from(formData, ([key, value]) => {
+          if (typeof value === "string") {
+            return [key, value];
+          } else {
+            return [key, value.name];
+          }
+        })
+      );
 
-      const subject = contactMsg.get("subject");
-      const fromEmail = contactMsg.get("email");
-      const message = contactMsg.get("message");
+      const subject = searchParams.get("subject");
+      const fromEmail = searchParams.get("email");
+      const text = searchParams.get("text");
 
       const { data, error } = await resend.emails.send({
         from: "No-reply <no-reply@ppconde.com>",
         replyTo: fromEmail,
         to: "contact@ppconde.com",
         subject: String(subject),
-        text: String(message),
+        text: String(text),
       });
 
       return Response.json({ data, error });
