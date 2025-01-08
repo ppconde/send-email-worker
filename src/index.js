@@ -14,6 +14,7 @@ export default {
       const subject = contactMsg.get("subject");
       const fromEmail = contactMsg.get("email");
       const message = contactMsg.get("message");
+      const html = contactMsg.get("html");
 
       const { data, error } = await resend.emails.send(
         JSON.stringify({
@@ -21,6 +22,7 @@ export default {
           replyTo: fromEmail,
           to: "contact@ppconde.com",
           subject,
+          text: message,
           html,
         })
       );
