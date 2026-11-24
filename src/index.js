@@ -32,9 +32,13 @@ export default {
         text: String(text),
       });
 
-      return Response.json({ data, error });
+      // A non-2xx status, so the caller knows the email wasn't sent.
+      return Response.json({ data, error }, { status: error ? 502 : 200 });
     } catch (error) {
-      return Response.json({ error: error.message || "Unknown error" });
+      return Response.json(
+        { error: error.message || "Unknown error" },
+        { status: 500 }
+      );
     }
   },
 };
